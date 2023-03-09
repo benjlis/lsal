@@ -12,3 +12,10 @@ select t.test_id,
        ts.label_studio_id, ts.creator, ts.completed
     from piir_eval.tests t join piir_eval.ground_truth_stage ts
         on (t.doc_id = ts.doc);
+
+update piir_eval.ground_truth gt
+   set entity_text = (select substr(t.body, 
+                                    gt.start_idx+1, 
+                                    gt.end_idx-start_idx)
+                            from piir_eval.tests t
+                            where t.test_id = gt.test_id);
